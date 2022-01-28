@@ -43,6 +43,7 @@ Dex.includeModData();
 
 const {ExhaustiveRunner} = require('../../.sim-dist/tools/exhaustive-runner');
 const {MultiRandomRunner} = require('../../.sim-dist/tools/multi-random-runner');
+// const {MultiMonteCarloRunner} = require('../../.sim-dist/tools/montecarlo-runner');
 
 // Tracks whether some promises threw errors that weren't caught so we can log
 // and exit with a non-zero status to fail any tests. This "shouldn't happen"
@@ -109,6 +110,15 @@ case 'random':
 		(async () => process.exit(await new MultiRandomRunner(options).run()))();
 	}
 	break;
+// case 'montecarlo':
+// 	{
+// 		const argv = parseFlags(process.argv);
+// 		const options = Object.assign({totalGames: 100}, argv);
+// 		options.totalGames = Number(argv._[1] || argv.num) || options.totalGames;
+// 		if (argv.seed) options.prng = argv.seed.split(',').map(s => Number(s));
+// 		// Run options.totalGames, exiting with the number of games with errors.
+// 		(async () => process.exit(await new MultiMonteCarloRunner(options).run()))(); 
+// 	}
 case 'exhaustive':
 	{
 		const argv = parseFlags(process.argv);

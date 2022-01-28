@@ -14,6 +14,8 @@
  * @license MIT
  */
 
+import {writeFileSync} from 'fs';
+
 import {Dex, toID} from './dex';
 import {Teams} from './teams';
 import {Field} from './field';
@@ -1315,6 +1317,7 @@ export class Battle {
 		for (const s of this.sides) {
 			if (s) s.activeRequest = null;
 		}
+		this.writeToFile();
 		return true;
 	}
 
@@ -1396,7 +1399,14 @@ export class Battle {
 		pokemon.faint(source, effect);
 	}
 
+	writeToFile() {
+		const filename = 'botai/battle_states/' + this.format + '-' + this.prngSeed.join(',') + '-turn' + this.turn + '.txt';
+		const exportedJSON = JSON.stringify(this.toJSON());
+		writeFileSync(filename, exportedJSON);
+	}
+
 	nextTurn() {
+		if (Math.random() < 0.2 || this.turn === 0) this.writeToFile(); // write about 20% of turns
 		this.turn++;
 		this.lastSuccessfulMoveThisTurn = null;
 
